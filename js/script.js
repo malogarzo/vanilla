@@ -45,24 +45,28 @@
 			</div>`		
 		)
   }
-
-  // console.log(videoItemTemplate());
-
-  const	$actionContainer = document.querySelector('#action');
-
-  actionList.data.movies.forEach((movie) => {
-  	// debugger
-  	const HTMLString = videoItemTemplate(movie);
+  function createTemplate(HTMLString) {
   	const html = document.implementation.createHTMLDocument();
   	html.body.innerHTML = HTMLString;
-  	// debugger
-  	$actionContainer.append(html.body.children[0]);
-  	console.log(HTMLString);
+  	return html.body.children[0];
+  } 
+  function renderMovieList(list, $container) {
+  	$container.children[0].remove();
+	  list.forEach((movie) => {
+			const HTMLString = videoItemTemplate(movie);
+			const movieElement = createTemplate(HTMLString);
+			$container.append(movieElement);
+  	})
+  }
 
-  })
-  
-  const	$animationContainer = document.getElementById('#animation');    
-	const	$dramaContainer = document.getElementById('#drama');
+  const	$actionContainer = document.querySelector('#action');
+  renderMovieList(actionList.data.movies, $actionContainer);
+
+  const	$dramaContainer = document.getElementById('drama');
+  renderMovieList(dramaList.data.movies, $dramaContainer);
+
+  const	$animationContainer = document.getElementById('animation');
+  renderMovieList(animationList.data.movies, $animationContainer);
 
 
   // let dramaList;
