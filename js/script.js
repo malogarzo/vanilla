@@ -1,6 +1,6 @@
 
 
-alert('👻');
+// alert('👻');
 
 // fetch('https://randomuser.me/api/')
 // 	.then(function (response) {
@@ -26,20 +26,56 @@ alert('👻');
   	return data;
   }
 
-  // const terrorList = getData('https://yts.am/api/v2/list_movies.json?genre=terror');
+
+  // const dramaList = getData('https://yts.am/api/v2/list_movies.json?genre=drama');
   const actionList = await getData('https://yts.am/api/v2/list_movies.json?genre=action');
   const animationList = await getData('https://yts.am/api/v2/list_movies.json?genre=animation');
+  const dramaList = await getData('https://yts.am/api/v2/list_movies.json?genre=drama')
+  console.log(actionList, animationList, dramaList);
 
-  console.log(actionList, animationList);
+  function videoItemTemplate(movie) {
+  	return (
+			`<div class="primaryPlaylistItem">
+    		<div class="primaryPlaylistItem-image">
+      		<img src="${movie.medium_cover_image}">
+    		</div>
+    		<h4 class="primaryPlaylistItem-title">
+    			${movie.title}
+  			</h4>
+			</div>`		
+		)
+  }
 
-  let terrorList;
-  getData('https://yts.am/api/v2/list_movies.json?genre=terror')
-  	.then(function (data) {
-  		console.log('terrorList', data);
-  		terrorList = data;
-  	})
+  // console.log(videoItemTemplate());
 
-  console.log('terrorList', terrorList);
+  const	$actionContainer = document.querySelector('#action');
+
+  actionList.data.movies.forEach((movie) => {
+  	// debugger
+  	const HTMLString = videoItemTemplate(movie);
+  	const html = document.implementation.createHTMLDocument();
+  	html.body.innerHTML = HTMLString;
+  	// debugger
+  	$actionContainer.append(html.body.children[0]);
+  	console.log(HTMLString);
+
+  })
+  
+  const	$animationContainer = document.getElementById('#animation');    
+	const	$dramaContainer = document.getElementById('#drama');
+
+
+  // let dramaList;
+  // getData('https://yts.am/api/v2/list_movies.json?genre=drama')
+  // 	.then(function (data) {
+  // 		console.log('dramaList', data);
+  // 		dramaList = data;
+  // 	})
+
+  // console.log('dramaList', dramaList);
+	
+
+  const $home = document.getElementById('home');
 
 
 })()
