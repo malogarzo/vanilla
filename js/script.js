@@ -23,10 +23,26 @@
   }
   const $form = document.getElementById('form');
   const $home = document.getElementById('home');
+  const $featuringContainer = document.getElementById('featuring');
+
+  function setAttributes($element, attributes) {
+    for(const attribute in attributes) {
+      $element.setAttribute(attribute, attributes[attribute]);
+    }
+  }
 
   $form.addEventListener('submit', (event) => {
     event.preventDefault();
-    $home.classList.add('search-active')
+    $home.classList.add('search-active');
+
+    //loader
+    const $loader = document.createElement('img');
+    setAttributes($loader, {
+      src: 'images/loader.gif',
+      height: 50,
+      width: 50,
+    })
+    $featuringContainer.append($loader)
   })
 
   const actionList = await getData('https://yts.am/api/v2/list_movies.json?genre=action');
