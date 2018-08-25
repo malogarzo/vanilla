@@ -31,23 +31,45 @@
     }
   }
 
-  $form.addEventListener('submit', (event) => {
-    event.preventDefault();
-    $home.classList.add('search-active');
+  const BASE_API = 'https://yts.am/api/v2/';
 
-    //loader
+  function featuringTemplate(mov) {
+    return (
+      `
+      <div class="featuring">
+        <div class="featuring-image">
+          <img src="${mov.medium_cover_image}" width="70" height="100" alt="">
+        </div>
+        <div class="featuring-content">
+          <p class="featuring-title">Pelicula encontrada</p>
+          <p class="featuring-album">${mov.title}</p>
+        </div>
+      </div>
+      `
+    )
+  }
+
+  $form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    $home.classList.add('search-active')
+
     const $loader = document.createElement('img');
     setAttributes($loader, {
       src: 'images/loader.gif',
       height: 50,
       width: 50,
     })
-    $featuringContainer.append($loader)
+    $featuringContainer.append($loader);
+
+    const data = new FormData($form);
+    const mov = await getData(`${BASE_API}list_movies.json?limit=1&query_term=${data.get('name')}`)
+    const HTMLString = featuringTemplate(mov.data.movies[0]);
+    $featuringContainer.innerHTML = HTMLString;
   })
 
-  const actionList = await getData('https://yts.am/api/v2/list_movies.json?genre=action');
-  const animationList = await getData('https://yts.am/api/v2/list_movies.json?genre=animation');
-  const dramaList = await getData('https://yts.am/api/v2/list_movies.json?genre=drama')
+  const actionList = await getData(`${BASE_API}list_movies.json?genre=action`);
+  const animationList = await getData(`${BASE_API}list_movies.json?genre=animation`);
+  const dramaList = await getData(`${BASE_API}list_movies.json?genre=drama`);
   console.log(actionList, animationList, dramaList);
 
   function videoItemTemplate(movie) {
