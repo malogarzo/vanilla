@@ -72,11 +72,6 @@
     $featuringContainer.innerHTML = HTMLString;
   })
 
-  const { data: { movies: actionList } } = await getData(`${BASE_API}list_movies.json?genre=action`);
-  const { data: { movies: animationList } } = await getData(`${BASE_API}list_movies.json?genre=animation`);
-  const { data: { movies: dramaList } } = await getData(`${BASE_API}list_movies.json?genre=drama`);
-  console.log(actionList, animationList, dramaList);
-
   function videoItemTemplate(movie, category) {
   	return (
 			`<div class="primaryPlaylistItem" data-id="${movie.id}" data-category="${category}">
@@ -105,16 +100,24 @@
 			const HTMLString = videoItemTemplate(movie, category);
 			const movieElement = createTemplate(HTMLString);
 			$container.append(movieElement);
+      const image = movieElement.querySelector('img');
+      image.addEventListener('load', () => {
+        event.srcElement.classList.add('fadeIn');
+      })
+      
       addEventClick(movieElement);
   	})
   }
 
-  const	$actionContainer = document.querySelector('#action');
+  const { data: { movies: actionList } } = await getData(`${BASE_API}list_movies.json?genre=action`);
+  const $actionContainer = document.querySelector('#action');
   renderMovieList(actionList, $actionContainer, 'action');
-
+  
+  const { data: { movies: dramaList } } = await getData(`${BASE_API}list_movies.json?genre=drama`);
   const	$dramaContainer = document.getElementById('drama');
   renderMovieList(dramaList, $dramaContainer, 'drama');
 
+  const { data: { movies: animationList } } = await getData(`${BASE_API}list_movies.json?genre=animation`);
   const	$animationContainer = document.getElementById('animation');
   renderMovieList(animationList, $animationContainer, 'animation');
 
