@@ -22,7 +22,7 @@
 
       return data;
     }
-    
+
     throw new Error('No se encontró ningún resultado');
   }
   const $form = document.getElementById('form');
@@ -167,7 +167,7 @@
 
     $modalTitle.textContent = data.title;
     $modalImage.setAttribute('src', data.medium_cover_image);
-    $modalDescription.textContent = data.description_full;
+    $modalDescription.textContent = data.description_full
   }
 
   $hideModal.addEventListener('click', hideModal);
