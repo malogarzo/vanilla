@@ -98,36 +98,33 @@
       const image = movieElement.querySelector('img');
       image.addEventListener('load', (event) => {
         event.srcElement.classList.add('fadeIn');
-      })
-      
+      })  
       addEventClick(movieElement);
   	})
   }
 
-<<<<<<< HEAD
-  const { data: { movies: actionList } } = await getData(`${BASE_API}list_movies.json?genre=action`);
-  localStorage.setItem('actionList', JSON.stringify(actionList))
+  async function cacheExist(category) {
+    const listName = `${category}List`;
+    const cacheList = window.localStorage.getItem(listName);
+
+    if (cacheList) {
+      return JSON.parse(cacheList);
+    }
+    const { data: { movies: data } } = await getData(`${BASE_API}list_movies.json?genre=${category}`)
+    window.localStorage.setItem(listName, JSON.stringify(data))
+
+    return data;
+  }
+
+  const actionList = await cacheExist('action');
   const $actionContainer = document.querySelector('#action');
   renderMovieList(actionList, $actionContainer, 'action');
   
-  const { data: { movies: dramaList } } = await getData(`${BASE_API}list_movies.json?genre=drama`);
-  localStorage.setItem('dramaList', JSON.stringify(dramaList))
+  const dramaList = await cacheExist('drama');
   const	$dramaContainer = document.getElementById('drama');
   renderMovieList(dramaList, $dramaContainer, 'drama');
 
-  const { data: { movies: animationList } } = await getData(`${BASE_API}list_movies.json?genre=animation`);
-  localStorage.setItem('animationList', JSON.stringify(animationList))
-=======
-  const { data: { movies: actionList } } = await getData(`${BASE_API}list_movies.json?genre=action`)
-  const $actionContainer = document.querySelector('#action');
-  renderMovieList(actionList, $actionContainer, 'action');
-  
-  const { data: { movies: dramaList } } = await getData(`${BASE_API}list_movies.json?genre=drama`)
-  const	$dramaContainer = document.getElementById('drama');
-  renderMovieList(dramaList, $dramaContainer, 'drama');
-
-  const { data: { movies: animationList } } = await getData(`${BASE_API}list_movies.json?genre=animation`)
->>>>>>> 17f2fda35a1d5d1fcacef949a283bdd5e95b1965
+  const animationList = await cacheExist('animationList');
   const	$animationContainer = document.getElementById('animation');
   renderMovieList(animationList, $animationContainer, 'animation');
 
